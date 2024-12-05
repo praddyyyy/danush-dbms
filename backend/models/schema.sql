@@ -13,7 +13,10 @@ CREATE TABLE Vehicles (
     make_year TEXT,
     license_plate TEXT UNIQUE NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
+
 -- Service Packages table: Stores predefined service packages
 CREATE TABLE Service_Packages (
     service_package_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,9 +35,14 @@ CREATE TABLE Appointments (
     status TEXT CHECK (
         status IN ('scheduled', 'completed', 'cancelled')
     ) NOT NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicles(vehicle_id),
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicles(vehicle_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     FOREIGN KEY (service_package_id) REFERENCES Service_Packages(service_package_id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
 );
+
 -- Employees table: Stores employees assigned to services
 CREATE TABLE Employees (
     employee_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,9 +58,14 @@ CREATE TABLE Service_Records (
     employee_id INTEGER,
     details TEXT,
     duration INTEGER,
-    FOREIGN KEY (appointment_id) REFERENCES Appointments(appointment_id),
+    FOREIGN KEY (appointment_id) REFERENCES Appointments(appointment_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
 );
+
 -- Inventory table: Tracks inventory details for service usage
 CREATE TABLE Inventory (
     inventory_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,9 +79,14 @@ CREATE TABLE ServiceRecord_Inventory (
     inventory_id INTEGER NOT NULL,
     quantity_used INTEGER NOT NULL,
     PRIMARY KEY (service_record_id, inventory_id),
-    FOREIGN KEY (service_record_id) REFERENCES Service_Records(service_record_id),
+    FOREIGN KEY (service_record_id) REFERENCES Service_Records(service_record_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     FOREIGN KEY (inventory_id) REFERENCES Inventory(inventory_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
+
 -- Feedback table: Tracks feedback for completed appointments
 CREATE TABLE Feedback (
     feedback_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,6 +96,10 @@ CREATE TABLE Feedback (
         rating BETWEEN 1 AND 5
     ),
     comments TEXT,
-    FOREIGN KEY (appointment_id) REFERENCES Appointments(appointment_id),
+    FOREIGN KEY (appointment_id) REFERENCES Appointments(appointment_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
