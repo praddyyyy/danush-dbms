@@ -96,6 +96,7 @@ export default function CustomerTable() {
       try {
         const response = await axios.get("http://localhost:5000/customers");
         const fetchedCustomers = response.data;
+        console.log(fetchedCustomers);
         setCustomers(fetchedCustomers);
         setFilteredCustomers(fetchedCustomers);
       } catch (error) {

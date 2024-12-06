@@ -2,10 +2,10 @@ from flask import Flask, request, jsonify
 from database import init_db
 from flask_cors import CORS
 from models import (
-    add_customer, get_customers, update_customer, delete_customer, add_vehicle, get_vehicles_by_customer,
+    add_customer, get_customers, update_customer, delete_customer, add_vehicle, get_vehicles_by_customer, get_customer_id_from_name,
     add_service_package, get_service_packages, add_appointment, get_appointments, get_monthly_appointments,
     add_inventory, get_inventory, update_inventory,
-    add_employee, get_employees,
+    add_employee, get_employees, get_vehicle,
     add_schedule_appointment, get_service_chart_data, inventory_usage, get_appointments_today, get_low_inventory, get_upcoming_appointments
 )
 import json
@@ -65,8 +65,11 @@ def vehicles(customer_id):
 def vehicles_all():
     if request.method == 'POST':
         data = request.json
-        add_vehicle(data['customer_id'], data['model_year'], data['license_plate'])
-        return jsonify({'message': 'Vehicle added successfully'}), 201
+        customer_id = get_customer_id_from_name(data['customer_name'])
+        vehicle_id = add_vehicle(customer_id, data['make_year'], data['license_plate'])
+        vehicle = get_vehicle(vehicle_id)
+        vehicle['customer_name'] = data['customer_name']
+        return jsonify({'message': 'Vehicle added successfully', 'data': vehicle}), 201
     else:
         vehicles = get_vehicles_by_customer(None)
         vehicles_with_customers = []

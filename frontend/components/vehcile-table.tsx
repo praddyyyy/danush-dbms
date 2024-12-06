@@ -140,11 +140,14 @@ export default function VehicleTable() {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
     try {
       const response = await axios.post(
         "http://localhost:5000/vehicles",
         values
       );
+      console.log(response.data);
+      console.log(vehicles);
       setVehicles([...vehicles, response.data.data]);
       setFilteredVehicles([...filteredVehicles, response.data.data]);
       setIsAddVehicleOpen(false);
