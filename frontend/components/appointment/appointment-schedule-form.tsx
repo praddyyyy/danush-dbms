@@ -185,13 +185,19 @@ export default function ImprovedAppointmentForm() {
     console.log("in submit");
     console.log(values);
     try {
+      const formattedValues = {
+        ...values,
+        appointment_date: new Date(values.appointment_date).toISOString().split("T")[0], // Converts to 'YYYY-MM-DD'
+      };
+  
+      console.log("Formatted Values for Submission:", formattedValues);
       await axios
         .post("http://localhost:5000/schedule_appointment", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(values),
+          body: JSON.stringify(formattedValues),
         })
         .then((response) => {
           console.log(response.data);

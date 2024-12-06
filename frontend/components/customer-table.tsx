@@ -201,6 +201,14 @@ export default function CustomerTable() {
     }
   };
 
+  const onEditDialogOpen = (customer: Customer) => {
+    // Pre-fill the form with customer data
+    editForm.setValue("name", customer.name);
+    editForm.setValue("email", customer.email);
+    editForm.setValue("phone", customer.phone);
+    editForm.setValue("address", customer.address);
+  };
+
   return (
     <div className="px-4 py-8 h-screen bg-purple-50">
       <h1 className="text-4xl font-bold mb-8 text-center text-purple-900">
@@ -392,7 +400,11 @@ export default function CustomerTable() {
                           </Button>
                         </DialogContent>
                       </Dialog>
-                      <Dialog>
+                      <Dialog
+                        onOpenChange={(open) =>
+                          open && onEditDialogOpen(customer)
+                        }
+                      >
                         <DialogTrigger asChild>
                           <Button
                             variant="outline"
@@ -405,10 +417,6 @@ export default function CustomerTable() {
                         <DialogContent className="sm:max-w-[425px]">
                           <DialogHeader>
                             <DialogTitle>Edit Customer Details</DialogTitle>
-                            {/* <DialogDescription>
-                              Make changes to your profile here. Click save when
-                              you&apos;re done.
-                            </DialogDescription> */}
                           </DialogHeader>
                           <Form {...editForm}>
                             <form
@@ -427,10 +435,9 @@ export default function CustomerTable() {
                                     </FormLabel>
                                     <FormControl>
                                       <Input
-                                        placeholder={customer.name}
+                                        placeholder="John Doe"
                                         {...field}
                                         className="bg-white text-purple-900"
-                                        defaultValue={customer.name}
                                       />
                                     </FormControl>
                                     <FormMessage className="text-red-500" />
@@ -448,10 +455,9 @@ export default function CustomerTable() {
                                     <FormControl>
                                       <Input
                                         type="email"
-                                        placeholder={customer.email}
+                                        placeholder="john@example.com"
                                         {...field}
                                         className="bg-white text-purple-900"
-                                        defaultValue={customer.email}
                                       />
                                     </FormControl>
                                     <FormMessage className="text-red-500" />
@@ -468,9 +474,8 @@ export default function CustomerTable() {
                                     </FormLabel>
                                     <FormControl>
                                       <Input
-                                        placeholder={customer.phone}
+                                        placeholder="123-456-7890"
                                         {...field}
-                                        defaultValue={customer.phone}
                                         className="bg-white text-purple-900"
                                       />
                                     </FormControl>
@@ -488,9 +493,8 @@ export default function CustomerTable() {
                                     </FormLabel>
                                     <FormControl>
                                       <Input
-                                        placeholder={customer.address}
+                                        placeholder="123 Main St"
                                         {...field}
-                                        defaultValue={customer.address}
                                         className="bg-white text-purple-900"
                                       />
                                     </FormControl>
